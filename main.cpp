@@ -1,4 +1,5 @@
 #include "game.hpp"
+#include "user.hpp"
 
 #include <iostream>
 #include <sstream>
@@ -63,7 +64,6 @@ int main()
                 cout << "Invalid command" << endl;
                 continue;
             }
-
         }
         else if (command == "stay")
         {
@@ -86,6 +86,7 @@ int main()
             if (!loggedIn)
             {
                 cout << "Welcome " << playerName << "!" << endl;
+                user = make_unique<user>(playerName);
                 loggedIn = true;
             }
             else
