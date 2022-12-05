@@ -56,56 +56,29 @@ int main()
         }
         else if (command == "hit")
         {
+            // TODO: implement
+
             if (!gameExists)
             {
                 cout << "Invalid command" << endl;
                 continue;
             }
 
-            int x, y;
-            iss >> x >> y;
-            int result = g->hit(x - 1, y - 1, numMines);
-            // loss
-            if (result == 1)
-            {
-                cout << *g << endl;
-                cout << "You lose!" << endl;
-                gameExists = false;
-            }
-            // normal hit
-            else
-            {
-                int win = g->checkWin();
-                if (win == 1)
-                {
-                    cout << *g << endl;
-                    cout << "You win!" << endl;
-                    gameExists = false;
-                }
-                else
-                {
-                    cout << *g << endl;
-                }
-            }
         }
         else if (command == "stay")
         {
+            // TODO: implement
             if (!gameExists)
             {
                 cout << "Invalid command" << endl;
                 continue;
             }
-
-            int x, y;
-            iss >> x >> y;
-            g->flag(x - 1, y - 1);
-            cout << *g << endl;
         }
         else if (command == "quit")
         {
             gameExists = false;
             loggedIn = false;
-            //TODO: need to save user score/hands played to file
+            // TODO: need to save user score/hands played to file
             break;
         }
         else
