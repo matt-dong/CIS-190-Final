@@ -1,13 +1,14 @@
-CXX=g++-10
+CXX=g++
 CXXFLAGS=-std=c++20 -Wall -Werror -g
 
 all : main
 
-main : main.o
+main : card.o game.o main.o
 	$(CXX) -o $@ $^ $(CXXFLAGS)
 
 %.o : %.cpp %.hpp
 	$(CXX) -c -o $@ $< $(CXXFLAGS)
+
 
 .PHONY: clean
 
