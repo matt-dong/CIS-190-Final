@@ -3,6 +3,9 @@
 
 #include <iostream>
 #include <sstream>
+#include <vector>
+#include <algorithm>
+#include <fstream>
 
 using namespace std;
 
@@ -12,9 +15,9 @@ int main()
     bool gameExists = false;
     bool loggedIn = false;
     int numMines;
-    unique_ptr<player> p;
-    unique_ptr<game> g;
-
+    unique_ptr<Player> p;
+    unique_ptr<Game> g;
+    vector<unique_ptr<Player>> players;
 
     cout << "Welcome to Blackjack!" << endl;
     cout << "Commands:" << endl;
@@ -80,7 +83,17 @@ int main()
         {
             gameExists = false;
             loggedIn = false;
-            // TODO: need to save user score/hands played to file
+
+            // save user score/hands played to file
+            ofstream myfile;
+            myfile.open("player_data.txt");
+            myfile << "Name\tScore\tHands Played"<< endl;
+            for (auto &player : players)
+            {
+                myfile << player->get_name() << "\t" << player->get_score() << "\t" << player->get_hands_played() << endl;
+            }
+            myfile.close();
+
             break;
         }
         else
@@ -88,7 +101,8 @@ int main()
             if (!loggedIn)
             {
                 cout << "Welcome " << playerName << "!" << endl;
-                user = make_unique<player>(playerName);
+                p = make_unique<Player>(playerName);
+                players.push_back(move(p));
                 loggedIn = true;
             }
             else
