@@ -9,7 +9,6 @@ main : card.o game.o main.o
 %.o : %.cpp %.hpp
 	$(CXX) -c -o $@ $< $(CXXFLAGS)
 
-
 .PHONY: clean
 
 clean:

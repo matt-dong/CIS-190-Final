@@ -1,5 +1,5 @@
 #include "game.hpp"
-#include "user.hpp"
+#include "player.hpp"
 
 #include <iostream>
 #include <sstream>
@@ -12,7 +12,9 @@ int main()
     bool gameExists = false;
     bool loggedIn = false;
     int numMines;
+    unique_ptr<player> p;
     unique_ptr<game> g;
+
 
     cout << "Welcome to Blackjack!" << endl;
     cout << "Commands:" << endl;
@@ -86,7 +88,7 @@ int main()
             if (!loggedIn)
             {
                 cout << "Welcome " << playerName << "!" << endl;
-                user = make_unique<user>(playerName);
+                user = make_unique<player>(playerName);
                 loggedIn = true;
             }
             else
