@@ -12,6 +12,7 @@ void print_instructions()
     cout << "Welcome to Blackjack!" << endl;
     cout << "Commands:" << endl;
     cout << "\thit" << endl;
+    cout << "\tdouble" << endl;
     cout << "\tstand" << endl;
     cout << "\tbet <dollars bet>" << endl;
     cout << "\thint" << endl;
@@ -48,6 +49,10 @@ int main()
         if (command == "hit" && game.is_active())
         {
             game.hit_player();
+        }
+        else if (command == "double" && game.is_active() && game.can_double_down())
+        {
+            game.double_down();
         }
         else if (command == "stand" && game.is_active())
         {

@@ -32,6 +32,8 @@ public:
     int get_true_count() const;
     void deal_hand(int bet);
     void hit_player();
+    void double_down();
+    bool can_double_down();
     void stand();
     void get_hint();
     bool is_profitable() const;

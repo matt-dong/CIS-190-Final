@@ -102,6 +102,18 @@ void Game::hit_player()
     }
 }
 
+void Game::double_down()
+{
+    bet *= 2;
+    hit(player_hand);
+    stand();
+}
+
+bool Game::can_double_down()
+{
+    return dealer_hand.size() == 2;
+}
+
 void Game::stand()
 {
     int dealer = evaluate(dealer_hand);
