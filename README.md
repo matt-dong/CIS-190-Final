@@ -1,5 +1,6 @@
 # Blackjack
-CIS 190 Final Project: Matthew Dong and Jonathan Kao
+
+## CIS 190 Final Project: Matthew Dong and Jonathan Kao
 
 **Project Proposal:**
 
