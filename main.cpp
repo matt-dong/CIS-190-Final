@@ -31,10 +31,26 @@ void load_data(vector<unique_ptr<Player>> &players)
             players.push_back(move(p));
             // cout << "Player " << name << " loaded!" << endl;
         }
-        cout << "Data loaded!" << endl;
         cout << players.size() << " players loaded!" << endl;
         file.close();
     }
+}
+
+void save_data(vector<unique_ptr<Player>> &players)
+{
+    // save user score/hands played to file
+    ofstream myfile;
+    myfile.open("player_data.txt");
+    myfile << "Name\tScore\tHands Played" << endl;
+
+    // save all player information to file
+    for (auto &player : players)
+    {
+        if (player)
+            myfile << player->get_name() << "\t" << player->get_score() << "\t" << player->get_hands_played() << endl;
+    }
+    cout << players.size() << " players saved!" << endl;
+    myfile.close();
 }
 
 int main()
@@ -138,19 +154,7 @@ int main()
             loggedIn = false;
             players.push_back(move(p));
 
-            // save user score/hands played to file
-            ofstream myfile;
-            myfile.open("player_data.txt");
-            myfile << "Name\tScore\tHands Played" << endl;
-
-            // save all player information to file
-            for (auto &player : players)
-            {
-                if (player)
-                    myfile << player->get_name() << "\t" << player->get_score() << "\t" << player->get_hands_played() << endl;
-            }
-
-            myfile.close();
+            save_data(players);
 
             return 0;
         }
@@ -176,6 +180,8 @@ int main()
                 if (player_exists != end(players))
                 {
                     p = move(*player_exists);
+                    players.erase(player_exists);
+                    
                     loggedIn = true;
                     cout << "Welcome back " << playerName << "!" << endl;
                 }
