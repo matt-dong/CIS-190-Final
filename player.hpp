@@ -7,11 +7,13 @@ using namespace std;
 class Player
 {
 private:
+    int hands_played;
+    int stack;
     string name;
-    int stack, hands_played;
 
 public:
-    Player(string name, int stack);
+    Player(string name);
+    Player(string name, int stack, int hands_played);
     string get_name() const;
     int get_stack() const;
     int get_hands_played() const;

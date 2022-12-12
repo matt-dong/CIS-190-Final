@@ -3,6 +3,7 @@
 #include <vector>
 #include <iostream>
 #include <string>
+#include <memory>
 
 #include "player.hpp"
 
@@ -13,7 +14,7 @@ class Game
 private:
     int bet, num_decks;
     bool active_hand;
-    Player player;
+    shared_ptr<Player> player;
     vector<int> player_hand;
     vector<int> dealer_hand;
     vector<int> deck;
@@ -25,7 +26,7 @@ private:
     string translate(int card);
 
 public:
-    Game(int num_decks, Player player);
+    Game(int num_decks, shared_ptr<Player> player);
     bool is_active() const;
     int get_balance() const;
     void deal_hand(int bet);
