@@ -48,7 +48,6 @@ void load_data(vector<shared_ptr<Player>> &players)
             shared_ptr<Player> p = make_shared<Player>(name, score, handsPlayed);
             players.push_back(move(p));
         }
-        cout << players.size() << " players loaded!" << endl;
         file.close();
     }
 }
@@ -87,6 +86,7 @@ void leaderboard(vector<shared_ptr<Player>> &players)
 
 shared_ptr<Player> login(vector<shared_ptr<Player>> &players)
 {
+    cout << "-------------------------" << endl;
     string playerName;
     shared_ptr<Player> p;
     cout << "Login: " << endl;
@@ -107,6 +107,7 @@ shared_ptr<Player> login(vector<shared_ptr<Player>> &players)
         players.push_back(p);
         cout << "Welcome " << playerName << "!" << endl;
     }
+    cout << "-------------------------" << endl;
     return p;
 }
 
@@ -133,6 +134,7 @@ int main()
 
     Game game{decks, player};
     cout << "Game started with " << decks << " decks" << endl;
+    cout << "-------------------------" << endl;
 
     print_instructions();
 

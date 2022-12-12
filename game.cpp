@@ -4,7 +4,7 @@
 
 #include "game.hpp"
 
-Game::Game(int num_decks, shared_ptr<Player> player) : bet{0}, num_decks{num_decks}, active_hand{false}, show_dealer{false}, player{player}, player_hand(), dealer_hand(), deck()
+Game::Game(int num_decks, shared_ptr<Player> player) : bet{0}, num_decks{num_decks}, count{0}, active_hand{false}, show_dealer{false}, player{player}, player_hand(), dealer_hand(), deck()
 {
 }
 
