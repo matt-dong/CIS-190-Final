@@ -7,10 +7,11 @@
 #include <algorithm>
 #include <iterator>
 #include <fstream>
+#include <array>
 
 using namespace std;
 
-void load_data(vector<unique_ptr<Player>> &players)
+void load_data(vector<shared_ptr<Player>> &players)
 {
     string s;
     ifstream file("player_data.txt");
@@ -27,7 +28,7 @@ void load_data(vector<unique_ptr<Player>> &players)
                 continue;
             }
 
-            unique_ptr<Player> p = make_unique<Player>(name, score, handsPlayed);
+            shared_ptr<Player> p = make_shared<Player>(name, score, handsPlayed);
             players.push_back(move(p));
             // cout << "Player " << name << " loaded!" << endl;
         }
@@ -36,7 +37,7 @@ void load_data(vector<unique_ptr<Player>> &players)
     }
 }
 
-void save_data(vector<unique_ptr<Player>> &players)
+void save_data(vector<shared_ptr<Player>> &players)
 {
     // save user score/hands played to file
     ofstream myfile;
@@ -59,8 +60,8 @@ int main()
     int decks, reshuffle;
     bool gameExists = false;
     bool loggedIn = false;
-    unique_ptr<Player> p;
-    vector<unique_ptr<Player>> players;
+    shared_ptr<Player> p;
+    vector<shared_ptr<Player>> players;
 
     cout << "Welcome to Blackjack!" << endl;
     cout << "Commands:" << endl;
@@ -148,12 +149,27 @@ int main()
             // }
         }
 
+        else if (command == "leaderboard")
+        { // don't modify or sort original vector
+
+            vector<shared_ptr<Player>> leaders(min(5, (int)players.size()));
+            partial_sort_copy(
+                begin(players), std::end(players),
+                begin(leaders), end(leaders),
+                [](auto &p1, auto &p2)
+                { return p1->get_score() > p2->get_score(); });
+
+            cout << "Leaderboard:" << endl;
+            for (auto player : leaders)
+                cout << player->get_name() << "\t" << player->get_score() << endl;
+
+            continue;
+        }
+
         else if (command == "quit")
         {
             gameExists = false;
             loggedIn = false;
-            players.push_back(move(p));
-
             save_data(players);
 
             return 0;
@@ -162,7 +178,6 @@ int main()
         {
             if (!loggedIn)
             { // check if player exists and login
-
                 // for (auto &player : players)
                 // {
                 //     if (player->get_name() == playerName)
@@ -179,15 +194,13 @@ int main()
                     { return player->get_name() == playerName; });
                 if (player_exists != end(players))
                 {
-                    p = move(*player_exists);
-                    players.erase(player_exists);
-                    
+                    p = *player_exists;
                     loggedIn = true;
                     cout << "Welcome back " << playerName << "!" << endl;
                 }
                 else
                 {
-                    p = make_unique<Player>(playerName);
+                    p = make_shared<Player>(playerName);
                     players.push_back(move(p));
                     loggedIn = true;
                     cout << "Welcome " << playerName << "!" << endl;

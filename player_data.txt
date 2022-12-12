@@ -1,4 +1,4 @@
 Name	Score	Hands Played
+matt	10	0
 jon	0	0
 bob	0	0
-matt	0	0
