@@ -13,7 +13,7 @@ class Game
 {
 private:
     int bet, num_decks, count;
-    bool active_hand;
+    bool active_hand, show_dealer;
     shared_ptr<Player> player;
     vector<int> player_hand;
     vector<int> dealer_hand;
@@ -33,6 +33,8 @@ public:
     int get_true_count() const;
     void deal_hand(int bet);
     void hit_player();
+    void double_down();
+    bool can_double_down();
     void stand();
     void get_hint();
     bool is_profitable() const;

@@ -18,6 +18,7 @@ void print_instructions()
     cout << "Welcome to Blackjack!" << endl;
     cout << "Commands:" << endl;
     cout << "\thit" << endl;
+    cout << "\tdouble" << endl;
     cout << "\tstand" << endl;
     cout << "\tbet <dollars bet>" << endl;
     cout << "\thint" << endl;
@@ -146,6 +147,10 @@ int main()
         {
             game.hit_player();
         }
+        else if (command == "double" && game.is_active() && game.can_double_down())
+        {
+            game.double_down();
+        }
         else if (command == "stand" && game.is_active())
         {
             game.stand();
@@ -155,7 +160,6 @@ int main()
             int amount;
             iss >> amount;
             cout << "Amount Wagered: " << amount << endl;
-            cout << "Account Balance: " << game.get_balance() << endl;
             if (game.is_profitable())
             {
                 cout << "Hint: based on the true count of " << game.get_true_count() << " this was a +EV bet" << endl;
@@ -165,6 +169,7 @@ int main()
                 cout << "Hint: based on the true count of " << game.get_true_count() << " this was a -EV bet" << endl;
             }
             game.deal_hand(amount);
+            cout << "Account Balance: " << game.get_balance() << endl;
             cout << "-------------------------" << endl;
         }
         else if (command == "leaderboard")
@@ -187,6 +192,8 @@ int main()
         }
         else
         {
+            cout << "Invalid command" << endl;
+            continue;
         }
 
         cout << game;

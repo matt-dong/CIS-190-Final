@@ -1,13 +1,10 @@
-#ifndef GAME_HPP
-#define GAME_HPP
-
 #include <algorithm>
 #include <random>
 #include <chrono>
 
 #include "game.hpp"
 
-Game::Game(int num_decks, shared_ptr<Player> player) : bet{0}, num_decks{num_decks}, active_hand{false}, player{player}, player_hand(), dealer_hand(), deck()
+Game::Game(int num_decks, shared_ptr<Player> player) : bet{0}, num_decks{num_decks}, active_hand{false}, show_dealer{false}, player{player}, player_hand(), dealer_hand(), deck()
 {
 }
 
@@ -82,6 +79,7 @@ void Game::deal_hand(int bet)
     deal_card(dealer_hand);
     deal_card(dealer_hand);
     active_hand = true;
+    show_dealer = false;
     player->incr_hands_played();
 }
 
@@ -102,6 +100,18 @@ void Game::hit_player()
     {
         end_turn();
     }
+}
+
+void Game::double_down()
+{
+    bet *= 2;
+    hit(player_hand);
+    stand();
+}
+
+bool Game::can_double_down()
+{
+    return dealer_hand.size() == 2;
 }
 
 void Game::stand()
@@ -140,6 +150,7 @@ void Game::end_turn()
 {
     int player_score = evaluate(player_hand);
     int dealer_score = evaluate(dealer_hand);
+    show_dealer = true;
     cout << *this;
     if (player_score == 21 && player_hand.size() == 2)
     {
@@ -255,6 +266,10 @@ void Game::get_hint()
             cout << "Recommended play: Hit" << endl;
         }
     }
+    else if (player_total == 11 || (player_total == 10 && up_card >= 2 && up_card <= 9) || (player_total == 9 && up_card >= 3 && up_card <= 6))
+    {
+        cout << "Recommended play: Double" << endl;
+    }
     else
     {
         cout << "Recommended play: Hit" << endl;
@@ -274,9 +289,16 @@ ostream &operator<<(ostream &os, const Game &g)
         return os;
     }
     os << "Dealer Hand:" << endl;
-    for (int hand : g.dealer_hand)
+    if (g.show_dealer)
     {
-        os << g.translate(hand) << " ";
+        for (int hand : g.dealer_hand)
+        {
+            os << g.translate(hand) << " ";
+        }
+    }
+    else
+    {
+        os << "* " << g.translate(g.dealer_hand.at(1));
     }
     os << endl;
     os << "Player Hand:" << endl;
@@ -288,5 +310,3 @@ ostream &operator<<(ostream &os, const Game &g)
     cout << "-------------------------" << endl;
     return os;
 }
-
-#endif
