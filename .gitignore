@@ -36,3 +36,6 @@ main
 
 # vscode
 .vscode/
+
+# custom
+player_data.txt
