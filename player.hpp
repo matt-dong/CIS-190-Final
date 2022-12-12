@@ -15,6 +15,7 @@ private:
 
 public:
     Player(string name);
+    Player(string name, int score, int handsPlayed);
     string get_name() const;
     int get_score();
     int get_hands_played();

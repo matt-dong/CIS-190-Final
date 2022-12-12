@@ -11,6 +11,17 @@ Player::Player(string name) : handsPlayed{0},
 {
 }
 
+Player::Player(string name, int score, int handsPlayed) : handsPlayed{handsPlayed},
+                                                          score{score},
+                                                          name{name}
+{
+}
+
+string Player::get_name() const
+{
+    return name;
+}
+
 int Player::get_score()
 {
     return score;

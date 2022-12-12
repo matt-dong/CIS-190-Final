@@ -13,7 +13,7 @@ using namespace std;
 class Game
 {
 private:
-    int bet;
+    int score;
     Player player;
     vector<unique_ptr<Card>> player_hand;
     vector<unique_ptr<Card>> dealer_hand;
