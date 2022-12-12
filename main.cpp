@@ -1,18 +1,50 @@
 #include "game.hpp"
-#include "user.hpp"
+#include "player.hpp"
 
 #include <iostream>
 #include <sstream>
+#include <vector>
+#include <algorithm>
+#include <iterator>
+#include <fstream>
 
 using namespace std;
+
+void load_data(vector<unique_ptr<Player>> &players)
+{
+    string s;
+    ifstream file("player_data.txt");
+    if (file.is_open())
+    {
+        while (getline(file, s))
+        {
+            istringstream iss(s);
+            string name;
+            int score, handsPlayed;
+            iss >> name >> score >> handsPlayed;
+            if (!iss)
+            { // reads an invalid input
+                continue;
+            }
+
+            unique_ptr<Player> p = make_unique<Player>(name, score, handsPlayed);
+            players.push_back(move(p));
+            // cout << "Player " << name << " loaded!" << endl;
+        }
+        cout << "Data loaded!" << endl;
+        cout << players.size() << " players loaded!" << endl;
+        file.close();
+    }
+}
 
 int main()
 {
     string s, playerName;
+    int decks, reshuffle;
     bool gameExists = false;
     bool loggedIn = false;
-    int numMines;
-    unique_ptr<game> g;
+    unique_ptr<Player> p;
+    vector<unique_ptr<Player>> players;
 
     cout << "Welcome to Blackjack!" << endl;
     cout << "Commands:" << endl;
@@ -23,6 +55,8 @@ int main()
     cout << "\tscore" << endl;
     cout << "\tleaderboard" << endl;
     cout << "\tquit" << endl;
+
+    load_data(players);
 
     cout << "Input your login: ";
     cin >> playerName;
@@ -36,7 +70,6 @@ int main()
 
         if (command == "start")
         {
-            int decks, reshuffle;
             iss >> decks >> reshuffle;
             if (decks <= 0)
             {
@@ -50,21 +83,20 @@ int main()
             }
             // generate game
             cout << "Starting game with " << decks << " decks and reshuffle at " << reshuffle << "%" << endl;
-            g = make_unique<game>(width, height);
-            // print game
-            cout << *g << endl;
+            Game g = Game(*p, decks);
             gameExists = true;
         }
+
         else if (command == "hit")
         {
             // TODO: implement
-
             if (!gameExists)
             {
                 cout << "Invalid command" << endl;
                 continue;
             }
         }
+
         else if (command == "stay")
         {
             // TODO: implement
@@ -74,20 +106,88 @@ int main()
                 continue;
             }
         }
+
+        else if (command == "bet")
+        {
+            // TODO: implement
+            if (!gameExists)
+            {
+                cout << "Invalid command" << endl;
+                continue;
+            }
+            int bet;
+            iss >> bet;
+            g.deal_hand(bet);
+            // show player hand
+            cout << "Player hand: " << endl;
+            for (auto &card : g.player_hand)
+            {
+                cout << card.value << endl;
+            }
+            // show dealer hand
+            cout << "Dealer hand: " << endl;
+            for (auto &card : g.dealer_hand)
+            {
+                cout << card.value << endl;
+            }
+        }
+
         else if (command == "quit")
         {
             gameExists = false;
             loggedIn = false;
-            // TODO: need to save user score/hands played to file
+
+            // save user score/hands played to file
+            ofstream myfile;
+            myfile.open("player_data.txt");
+            myfile << "Name\tScore\tHands Played" << endl;
+
+            for (auto player = players.begin(); player != players.end(); player++)
+            {
+                cout << (*player)->get_name() << "\t" << (*player)->get_score() << "\t" << (*player)->get_hands_played() << endl;
+            }
+
+            for (auto &player : players)
+            {
+                // cout << (*player)->get_nam() << "\t" << player->get_score() << "\t" << player->get_hands_played() << endl;
+                myfile << player->get_name() << "\t" << player->get_score() << "\t" << player->get_hands_played() << endl;
+            }
+            myfile.close();
+
             break;
         }
         else
         {
             if (!loggedIn)
             {
-                cout << "Welcome " << playerName << "!" << endl;
-                user = make_unique<user>(playerName);
-                loggedIn = true;
+                // check if player exists and login
+                // for (auto &player : players)
+                // {
+                //     if (player->get_name() == playerName)
+                //     {
+                //         p = move(player);
+                //         loggedIn = true;
+                //         break;
+                //     }
+                // }
+
+                // do this with algorithms
+                auto player_exists = find_if(
+                    begin(players), end(players), [playerName](auto &player)
+                    { return player->get_name() == playerName; });
+                if (player_exists != end(players))
+                {
+                    p = move(*player_exists);
+                    loggedIn = true;
+                    cout << "Welcome back " << playerName << "!" << endl;
+                }
+                else
+                {
+                    p = make_unique<Player>(playerName);
+                    players.push_back(move(p));
+                    loggedIn = true;
+                    cout << "Welcome " << playerName << "!" << endl;
+                }
             }
             else
                 cout << "Invalid command" << endl;

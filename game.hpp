@@ -13,15 +13,14 @@ using namespace std;
 class Game
 {
 private:
-    int bet;
+    int score;
     Player player;
-    vector<unique_ptr<Card>> player_hand;
-    vector<unique_ptr<Card>> dealer_hand;
-    vector<unique_ptr<Card>> deck;
+    vector<Card> player_hand;
+    vector<Card> dealer_hand;
+    Deck deck;
 
 public:
-    Game(Player player);
-    void reshuffle(int num_decks);
+    Game(Player player, int num_decks = 1);
     void deal_hand(int bet);
     void hit();
     void stand();
