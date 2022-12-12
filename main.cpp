@@ -113,12 +113,26 @@ int main()
 {
     vector<shared_ptr<Player>> players;
     load_data(players);
-
     shared_ptr<Player> player = login(players);
-    Game game{6, player};
+
+    string input;
+    cout << "How many decks would you like to play with?" << endl;
+    int decks;
+    cin >> decks;
+    while (std::cin.fail())
+    {
+        cout << "Please input an integer number of decks to play with" << endl;
+        cin.clear();
+        // skip bad input
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+        cin >> decks;
+    }
+
+    Game game{decks, player};
+    cout << "Game started with " << decks << " decks" << endl;
 
     print_instructions();
-    string input;
 
     while (getline(cin, input))
     {
