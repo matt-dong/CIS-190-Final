@@ -73,7 +73,7 @@ void save_data(vector<shared_ptr<Player>> &players)
 void leaderboard(vector<shared_ptr<Player>> &players)
 {
     // don't modify or sort original vector
-    vector<shared_ptr<Player>> leaders(min(5, (int)players.size()));
+    vector<shared_ptr<Player>> leaders(min(3, (int)players.size()));
     partial_sort_copy(
         begin(players), end(players),
         begin(leaders), end(leaders),
