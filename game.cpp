@@ -21,6 +21,13 @@ int Game::get_balance() const
     return active_hand ? player->get_stack() - bet : player->get_stack();
 }
 
+int Game::get_true_count() const
+{
+    int num_decks = deck.size() / 52 + 1;
+    int true_count = count / num_decks;
+    return true_count;
+}
+
 void Game::reshuffle()
 {
     deck.clear();
@@ -36,6 +43,31 @@ void Game::reshuffle()
     shuffle(deck.begin(), deck.end(), rng);
 }
 
+void Game::deal_card(vector<int> &hand)
+{
+    if (deck.size() < 1)
+    {
+        reshuffle();
+        count = 0;
+    }
+    int card = deck.at(deck.size() - 1);
+    int score = (card % 13 >= 9 ? 9 : card % 13) + 1;
+    if (score == 1)
+    {
+        count--;
+    }
+    else if (score >= 2 && score <= 6)
+    {
+        count++;
+    }
+    else if (score >= 10)
+    {
+        count--;
+    }
+    hand.push_back(card);
+    deck.resize(deck.size() - 1);
+}
+
 void Game::deal_hand(int bet)
 {
     if (deck.size() < 4)
@@ -45,11 +77,10 @@ void Game::deal_hand(int bet)
     this->bet = bet;
     player_hand.clear();
     dealer_hand.clear();
-    player_hand.push_back(deck.at(deck.size() - 1));
-    player_hand.push_back(deck.at(deck.size() - 2));
-    dealer_hand.push_back(deck.at(deck.size() - 3));
-    dealer_hand.push_back(deck.at(deck.size() - 4));
-    deck.resize(deck.size() - 4);
+    deal_card(player_hand);
+    deal_card(player_hand);
+    deal_card(dealer_hand);
+    deal_card(dealer_hand);
     active_hand = true;
     player->incr_hands_played();
 }
@@ -60,8 +91,7 @@ void Game::hit(vector<int> &hand)
     {
         reshuffle();
     }
-    hand.push_back(deck.at(deck.size() - 1));
-    deck.resize(deck.size() - 1);
+    deal_card(hand);
 }
 
 void Game::hit_player()
@@ -146,7 +176,7 @@ void Game::end_turn()
     active_hand = false;
 }
 
-string translate(int card)
+string Game::translate(int card) const
 {
     string res;
     int value = (card % 13) + 1;
@@ -194,6 +224,49 @@ string translate(int card)
     return res;
 }
 
+void Game::get_hint()
+{
+    cout << "Current count: " << count << endl;
+    int player_total = evaluate(player_hand);
+    int up_card = dealer_hand.at(1) % 13 + 1;
+    if (player_total >= 17)
+    {
+        cout << "Recommended play: Stand" << endl;
+    }
+    else if (player_total >= 13 && player_total <= 16)
+    {
+        if (up_card >= 7 || up_card == 1)
+        {
+            cout << "Recommended play: Hit" << endl;
+        }
+        else
+        {
+            cout << "Recommended play: Stand" << endl;
+        }
+    }
+    else if (player_total == 12)
+    {
+        if (up_card >= 4 && up_card <= 6)
+        {
+            cout << "Recommended play: Stand" << endl;
+        }
+        else
+        {
+            cout << "Recommended play: Hit" << endl;
+        }
+    }
+    else
+    {
+        cout << "Recommended play: Hit" << endl;
+    }
+    cout << "-------------------------" << endl;
+}
+
+bool Game::is_profitable() const
+{
+    return get_true_count() >= 1;
+}
+
 ostream &operator<<(ostream &os, const Game &g)
 {
     if (!g.active_hand)
@@ -203,13 +276,13 @@ ostream &operator<<(ostream &os, const Game &g)
     os << "Dealer Hand:" << endl;
     for (int hand : g.dealer_hand)
     {
-        os << translate(hand) << " ";
+        os << g.translate(hand) << " ";
     }
     os << endl;
     os << "Player Hand:" << endl;
     for (int hand : g.player_hand)
     {
-        os << translate(hand) << " ";
+        os << g.translate(hand) << " ";
     }
     os << endl;
     cout << "-------------------------" << endl;
