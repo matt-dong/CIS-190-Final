@@ -14,6 +14,7 @@ void print_instructions()
     cout << "\thit" << endl;
     cout << "\tstand" << endl;
     cout << "\tbet <dollars bet>" << endl;
+    cout << "\thint" << endl;
     cout << "\tscore" << endl;
     cout << "\tleaderboard" << endl;
     cout << "\tquit" << endl;
@@ -56,10 +57,22 @@ int main()
         {
             int amount;
             iss >> amount;
-            game.deal_hand(amount);
             cout << "Amount Wagered: " << amount << endl;
             cout << "Account Balance: " << game.get_balance() << endl;
+            if (game.is_profitable())
+            {
+                cout << "Hint: based on the true count of " << game.get_true_count() << " this was a +EV bet" << endl;
+            }
+            else
+            {
+                cout << "Hint: based on the true count of " << game.get_true_count() << " this was a -EV bet" << endl;
+            }
+            game.deal_hand(amount);
             cout << "-------------------------" << endl;
+        }
+        else if (command == "hint" && game.is_active())
+        {
+            game.get_hint();
         }
         else if (command == "quit")
         {
