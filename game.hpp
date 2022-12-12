@@ -12,7 +12,7 @@ class Game
 {
 private:
     int bet, num_decks, count;
-    bool active_hand;
+    bool active_hand, show_dealer;
     Player player;
     vector<int> player_hand;
     vector<int> dealer_hand;

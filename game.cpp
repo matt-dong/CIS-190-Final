@@ -4,7 +4,7 @@
 
 #include "game.hpp"
 
-Game::Game(int num_decks, Player player) : bet{0}, num_decks{num_decks}, count{0}, active_hand{false}, player{player}, player_hand(), dealer_hand(), deck()
+Game::Game(int num_decks, Player player) : bet{0}, num_decks{num_decks}, count{0}, active_hand{false}, show_dealer{false}, player{player}, player_hand(), dealer_hand(), deck()
 {
 }
 
@@ -79,6 +79,7 @@ void Game::deal_hand(int bet)
     deal_card(dealer_hand);
     deal_card(dealer_hand);
     active_hand = true;
+    show_dealer = false;
     player.incr_hands_played();
 }
 
@@ -137,6 +138,7 @@ void Game::end_turn()
 {
     int player_score = evaluate(player_hand);
     int dealer_score = evaluate(dealer_hand);
+    show_dealer = true;
     cout << *this;
     if (player_score == 21 && player_hand.size() == 2)
     {
@@ -271,9 +273,16 @@ ostream &operator<<(ostream &os, const Game &g)
         return os;
     }
     os << "Dealer Hand:" << endl;
-    for (int hand : g.dealer_hand)
+    if (g.show_dealer)
     {
-        os << g.translate(hand) << " ";
+        for (int hand : g.dealer_hand)
+        {
+            os << g.translate(hand) << " ";
+        }
+    }
+    else
+    {
+        os << "* " << g.translate(g.dealer_hand.at(1));
     }
     os << endl;
     os << "Player Hand:" << endl;

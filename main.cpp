@@ -58,7 +58,6 @@ int main()
             int amount;
             iss >> amount;
             cout << "Amount Wagered: " << amount << endl;
-            cout << "Account Balance: " << game.get_balance() << endl;
             if (game.is_profitable())
             {
                 cout << "Hint: based on the true count of " << game.get_true_count() << " this was a +EV bet" << endl;
@@ -68,6 +67,7 @@ int main()
                 cout << "Hint: based on the true count of " << game.get_true_count() << " this was a -EV bet" << endl;
             }
             game.deal_hand(amount);
+            cout << "Account Balance: " << game.get_balance() << endl;
             cout << "-------------------------" << endl;
         }
         else if (command == "hint" && game.is_active())
