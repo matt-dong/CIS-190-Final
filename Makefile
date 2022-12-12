@@ -9,6 +9,7 @@ main : player.o game.o main.o card.o
 %.o : %.cpp %.hpp
 	$(CXX) -c -o $@ $< $(CXXFLAGS)
 
+
 .PHONY: clean
 
 clean:

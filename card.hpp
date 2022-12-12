@@ -7,7 +7,7 @@ using namespace std;
 
 struct Card
 {
-    string suit; 
+    string suit;
     int value; // 1 = Ace, 2-10 = 2-10, 11 = Jack, 12 = Queen, 13 = King
 };
 
@@ -19,7 +19,7 @@ private:
 
 public:
     Deck(int num_decks = 1);
-    vector <Card> get_cards();
+    vector<Card> get_cards();
     Card draw();
     double percent_left();
     void shuffle();
