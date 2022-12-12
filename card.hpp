@@ -1,18 +1,27 @@
 #ifndef CARD_HPP
 #define CARD_HPP
-
 #include <iostream>
+#include <vector>
 
-class Card
+using namespace std;
+
+struct Card
+{
+    string suit; 
+    int value; // 1 = Ace, 2-10 = 2-10, 11 = Jack, 12 = Queen, 13 = King
+};
+
+class Deck
 {
 private:
-    int value, suit;
+    vector<Card> cards;
+    int num_decks;
 
 public:
-    Card(int value, int suit);
-    int get_value() const;
-    int get_suit() const;
-    friend ostream &operator<<(ostream &os, const Card &c);
+    Deck(int num_decks = 1);
+    Card draw();
+    double percent_left();
+    void shuffle();
 };
 
 #endif
