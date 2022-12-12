@@ -196,6 +196,7 @@ int main()
         else
         {
             cout << "Invalid command" << endl;
+            cout << "-------------------------" << endl;
             continue;
         }
 
