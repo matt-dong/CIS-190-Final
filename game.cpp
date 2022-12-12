@@ -266,6 +266,10 @@ void Game::get_hint()
             cout << "Recommended play: Hit" << endl;
         }
     }
+    else if (player_total == 11 || (player_total == 10 && up_card >= 2 && up_card <= 9) || (player_total == 9 && up_card >= 3 && up_card <= 6))
+    {
+        cout << "Recommended play: Double" << endl;
+    }
     else
     {
         cout << "Recommended play: Hit" << endl;
