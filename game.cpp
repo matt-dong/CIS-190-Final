@@ -4,7 +4,7 @@
 
 #include "game.hpp"
 
-Game::Game(int num_decks, Player player) : bet{0}, num_decks{num_decks}, count{0}, active_hand{false}, show_dealer{false}, player{player}, player_hand(), dealer_hand(), deck()
+Game::Game(int num_decks, shared_ptr<Player> player) : bet{0}, num_decks{num_decks}, active_hand{false}, show_dealer{false}, player{player}, player_hand(), dealer_hand(), deck()
 {
 }
 
@@ -15,7 +15,7 @@ bool Game::is_active() const
 
 int Game::get_balance() const
 {
-    return active_hand ? player.get_stack() - bet : player.get_stack();
+    return active_hand ? player->get_stack() - bet : player->get_stack();
 }
 
 int Game::get_true_count() const
@@ -80,7 +80,7 @@ void Game::deal_hand(int bet)
     deal_card(dealer_hand);
     active_hand = true;
     show_dealer = false;
-    player.incr_hands_played();
+    player->incr_hands_played();
 }
 
 void Game::hit(vector<int> &hand)
@@ -155,34 +155,34 @@ void Game::end_turn()
     if (player_score == 21 && player_hand.size() == 2)
     {
         cout << "Blackjack! Pays 2:1" << endl;
-        player.incr_stack(bet * 2);
+        player->incr_stack(bet * 2);
     }
     else if (dealer_score > 21)
     {
         cout << "Dealer Busts! Player wins" << endl;
-        player.incr_stack(bet);
+        player->incr_stack(bet);
     }
     else if (player_score > 21)
     {
         cout << "Player Busts! Dealer wins" << endl;
-        player.incr_stack(-1 * bet);
+        player->incr_stack(-1 * bet);
     }
     else if (player_score > dealer_score)
     {
         cout << "Player wins!" << endl;
-        player.incr_stack(bet);
+        player->incr_stack(bet);
     }
     else if (player_score < dealer_score)
     {
         cout << "Dealer wins!" << endl;
-        player.incr_stack(-1 * bet);
+        player->incr_stack(-1 * bet);
     }
     else
     {
         cout << "Player and dealer tie. Push!" << endl;
     }
     cout << "-------------------------" << endl;
-    cout << "Account Balance: " << player.get_stack() << endl;
+    cout << "Account Balance: " << player->get_stack() << endl;
     cout << "-------------------------" << endl;
     active_hand = false;
 }
