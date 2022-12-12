@@ -5,9 +5,11 @@
 
 using namespace std;
 
-Game::Game(Player player) : score{0},
-                            player{player}
+Game::Game(Player player, int num_decks) : score{0},
+                                           player{player}
 {
+    deck = Deck(num_decks);
+    deck.shuffle();
 }
 
 void Game::deal_hand(int bet)

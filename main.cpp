@@ -40,6 +40,7 @@ void load_data(vector<unique_ptr<Player>> &players)
 int main()
 {
     string s, playerName;
+    int decks, reshuffle;
     bool gameExists = false;
     bool loggedIn = false;
     unique_ptr<Player> p;
@@ -69,7 +70,6 @@ int main()
 
         if (command == "start")
         {
-            int decks, reshuffle;
             iss >> decks >> reshuffle;
             if (decks <= 0)
             {
@@ -83,7 +83,7 @@ int main()
             }
             // generate game
             cout << "Starting game with " << decks << " decks and reshuffle at " << reshuffle << "%" << endl;
-            Game g = Game(*p);
+            Game g = Game(*p, decks);
             gameExists = true;
         }
 
@@ -114,6 +114,21 @@ int main()
             {
                 cout << "Invalid command" << endl;
                 continue;
+            }
+            int bet;
+            iss >> bet;
+            g.deal_hand(bet);
+            // show player hand
+            cout << "Player hand: " << endl;
+            for (auto &card : g.player_hand)
+            {
+                cout << card.value << endl;
+            }
+            // show dealer hand
+            cout << "Dealer hand: " << endl;
+            for (auto &card : g.dealer_hand)
+            {
+                cout << card.value << endl;
             }
         }
 

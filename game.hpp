@@ -20,7 +20,7 @@ private:
     Deck deck;
 
 public:
-    Game(Player player);
+    Game(Player player, int num_decks = 1);
     void deal_hand(int bet);
     void hit();
     void stand();
