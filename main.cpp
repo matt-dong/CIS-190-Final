@@ -117,50 +117,48 @@ int main()
             }
             int bet;
             iss >> bet;
-            g.deal_hand(bet);
-            // show player hand
-            cout << "Player hand: " << endl;
-            for (auto &card : g.player_hand)
-            {
-                cout << card.value << endl;
-            }
-            // show dealer hand
-            cout << "Dealer hand: " << endl;
-            for (auto &card : g.dealer_hand)
-            {
-                cout << card.value << endl;
-            }
+            // g.deal_hand(bet);
+            // // show player hand
+            // cout << "Player hand: " << endl;
+            // for (auto &card : g.player_hand)
+            // {
+            //     cout << card.value << endl;
+            // }
+            // // show dealer hand
+            // cout << "Dealer hand: " << endl;
+            // for (auto &card : g.dealer_hand)
+            // {
+            //     cout << card.value << endl;
+            // }
         }
 
         else if (command == "quit")
         {
             gameExists = false;
             loggedIn = false;
+            players.push_back(move(p));
 
             // save user score/hands played to file
             ofstream myfile;
             myfile.open("player_data.txt");
             myfile << "Name\tScore\tHands Played" << endl;
 
-            for (auto player = players.begin(); player != players.end(); player++)
-            {
-                cout << (*player)->get_name() << "\t" << (*player)->get_score() << "\t" << (*player)->get_hands_played() << endl;
-            }
-
+            // save all player information to file
             for (auto &player : players)
             {
-                // cout << (*player)->get_nam() << "\t" << player->get_score() << "\t" << player->get_hands_played() << endl;
-                myfile << player->get_name() << "\t" << player->get_score() << "\t" << player->get_hands_played() << endl;
+                if (player)
+                    myfile << player->get_name() << "\t" << player->get_score() << "\t" << player->get_hands_played() << endl;
             }
+
             myfile.close();
 
-            break;
+            return 0;
         }
         else
         {
             if (!loggedIn)
-            {
-                // check if player exists and login
+            { // check if player exists and login
+
                 // for (auto &player : players)
                 // {
                 //     if (player->get_name() == playerName)
