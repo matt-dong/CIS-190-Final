@@ -19,6 +19,7 @@ private:
 
 public:
     Deck(int num_decks = 1);
+    vector <Card> get_cards();
     Card draw();
     double percent_left();
     void shuffle();

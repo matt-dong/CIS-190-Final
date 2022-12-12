@@ -25,6 +25,7 @@ Deck::Deck(int num_decks) : num_decks{num_decks}
             }
         }
     }
+    shuffle();
 }
 
 // Draw a card from the deck

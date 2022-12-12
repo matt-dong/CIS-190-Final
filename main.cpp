@@ -84,8 +84,6 @@ int main()
             // generate game
             cout << "Starting game with " << decks << " decks and reshuffle at " << reshuffle << "%" << endl;
             Game g = Game(*p);
-            // print game
-            // cout << *g << endl;
             gameExists = true;
         }
 
