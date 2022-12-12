@@ -178,6 +178,8 @@ int main()
         }
         else
         {
+            cout << "Invalid command" << endl;
+            continue;
         }
 
         cout << game;
